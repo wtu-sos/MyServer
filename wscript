@@ -34,6 +34,8 @@ def pre_build(ctx):
         ctx.exec_command(cmd)
         ctx.exec_command('ls -al src/proto')
 
+def post_build(ctx):
+    print("after build .....")
 
 
 includes_dir = ['.', 'libs/', 'libs/include']
@@ -48,6 +50,8 @@ link_flags = []
 
 def build(bld):
     bld.add_pre_fun(pre_build)
+    bld.add_post_fun(post_build)
+
     bld.program(
             source=bld.path.ant_glob(['src/**/*.cpp', 'src/**/*.cc'], excl=['src/server.cpp']), 
             includes = includes_dir,
