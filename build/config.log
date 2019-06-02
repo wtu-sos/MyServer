@@ -1,13 +1,13 @@
-# project io (0.0.1) configured on Sun Jun  2 09:08:21 2019 by
+# project io (0.0.1) configured on Sun Jun  2 21:41:07 2019 by
 # waf 2.0.16 (abi 20, python 30607f0 on linux)
 # using /home/yu/bin/waf configure
 #
 ----------------------------------------
 Setting top to
-/home/yu/git/foo
+/home/yu/git/MyServer
 ----------------------------------------
 Setting out to
-/home/yu/git/foo/build
+/home/yu/git/MyServer/build
 ----------------------------------------
 Checking for program 'g++, c++'
 /usr/bin/g++
@@ -365,20 +365,3 @@ out: #define __SSP_STRONG__ 3
 Checking for program 'ar'
 /usr/bin/ar
 find program=['ar'] paths=['/home/yu/.cargo/bin', '/home/yu/.cargo/bin', '/usr/local/sbin', '/usr/local/bin', '/usr/sbin', '/usr/bin', '/sbin', '/bin', '/usr/games', '/usr/local/games', '/snap/bin', '/home/yu/bin/'] var='AR' -> ['/usr/bin/ar']
-----------------------------------------
-Checking for library pthread
-==>
-
-int main(int argc, char **argv) {
-	(void)argc; (void)argv;
-	return 0;
-}
-
-<==
-[1/2] Compiling [32mbuild/.conf_check_078284ca909c6cf954c44e3bb33f6e46/test.cpp[0m
-
-['/usr/bin/g++', '../test.cpp', '-c', '-o/home/yu/git/foo/build/.conf_check_078284ca909c6cf954c44e3bb33f6e46/testbuild/test.cpp.1.o']
-[2/2] Linking [33mbuild/.conf_check_078284ca909c6cf954c44e3bb33f6e46/testbuild/testprog[0m
-
-['/usr/bin/g++', 'test.cpp.1.o', '-o/home/yu/git/foo/build/.conf_check_078284ca909c6cf954c44e3bb33f6e46/testbuild/testprog', '-Wl,-Bstatic', '-Wl,-Bdynamic', '-lpthread']
-yes

@@ -17,7 +17,6 @@ DEST_CPU = 'x86_64'
 DEST_OS = 'linux'
 LIBDIR = '/usr/local/lib'
 LIBPATH_ST = '-L%s'
-LIB_PTHREAD = ['pthread']
 LIB_ST = '-l%s'
 LINKFLAGS_MACBUNDLE = ['-bundle', '-undefined', 'dynamic_lookup']
 LINKFLAGS_cxxshlib = ['-shared']
