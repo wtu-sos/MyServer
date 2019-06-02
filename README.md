@@ -1,3 +1,3 @@
 # MyServer
 
-testing
+test
