@@ -1,13 +1,3 @@
-//
-// chat_server.cpp
-// ~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2019 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -19,6 +9,9 @@
 #include "message.h"
 
 #include "proto/a.pb.h"
+
+// glog
+#include "glog/logging.h"
 
 using asio::ip::tcp;
 
@@ -209,8 +202,10 @@ private:
 
 int main(int argc, char* argv[])
 {
+  // Initialize Google's logging library.
+  google::InitGoogleLogging("~/git/MyServer/log");
 
-  std::cout<< "pb message header :" << sizeof(MsgHeader ) << "\n byte size: " << MsgHeader().ByteSizeLong() << std::endl;
+  LOG(INFO) << "pb message header :" << sizeof(MsgHeader ) << "\n byte size: " << MsgHeader().ByteSizeLong() << std::endl;
   try
   {
     if (argc < 2)
