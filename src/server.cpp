@@ -203,7 +203,8 @@ private:
 int main(int argc, char* argv[])
 {
   // Initialize Google's logging library.
-  google::InitGoogleLogging("~/git/MyServer/log");
+  google::InitGoogleLogging("MyServer");
+  google::SetLogDestination(google::GLOG_INFO, "./log/info/");
 
   LOG(INFO) << "pb message header :" << sizeof(MsgHeader ) << "\n byte size: " << MsgHeader().ByteSizeLong() << std::endl;
   try

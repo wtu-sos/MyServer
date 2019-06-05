@@ -44,7 +44,7 @@ cxx_build_flags = ['-std=c++14', '-g', '-O0']
 ld_flags = ['-lpthread', '-lglog', '-L/home/yu/git/MyServer/libs/glog/glog/lib']
 r_path = ['/home/yu/git/MyServer/libs/glog/glog/lib']
 
-link_flags = ['--whole-file']
+link_flags = []
 
 #dynamic library
 share_libs = ['protobuf']
