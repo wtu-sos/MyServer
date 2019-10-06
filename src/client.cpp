@@ -65,10 +65,10 @@ private:
   void do_read_header()
   {
     asio::async_read(socket_,
-        asio::buffer(read_msg_.data(), message::header_length),
+        asio::buffer(read_msg_.data(), sizeof(int)),
         [this](std::error_code ec, std::size_t /*length*/)
         {
-          if (!ec && read_msg_.decode_header())
+          if (!ec && read_msg_.decode_len())
           {
             do_read_body();
           }
@@ -85,7 +85,7 @@ private:
         asio::buffer(read_msg_.body(), read_msg_.body_length()),
         [this](std::error_code ec, std::size_t /*length*/)
         {
-          if (!ec)
+          if (!ec && read_msg_.decode_header())
           {
             std::cout.write(read_msg_.body(), read_msg_.body_length());
             std::cout << "\n";
@@ -115,6 +115,7 @@ private:
           }
           else
           {
+            std::cout << "error : " << ec << std::endl;
             socket_.close();
           }
         });
@@ -146,14 +147,15 @@ int main(int argc, char* argv[])
     std::thread t([&io_context](){ io_context.run(); });
 
     char line[message::max_body_length + 1];
-    unsigned int id = 0;
+    unsigned int id = 1;
     while (std::cin.getline(line, message::max_body_length + 1))
     {
+      std::cout << "input : " << line;
       message msg;
       msg.set_id(id++);
-      msg.body_length(std::strlen(line));
-      msg.body_length(std::strlen(line));
-      std::memcpy(msg.body(), line, msg.body_length());
+      //msg.body_length(std::strlen(line));
+      msg.set_payload(line);
+      //std::memcpy(msg.body(), line, msg.body_length());
       msg.encode_header();
       c.write(msg);
     }

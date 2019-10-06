@@ -216,6 +216,19 @@ class MsgHeader :
 
   // accessors -------------------------------------------------------
 
+  // optional string content = 2;
+  bool has_content() const;
+  void clear_content();
+  static const int kContentFieldNumber = 2;
+  const std::string& content() const;
+  void set_content(const std::string& value);
+  void set_content(std::string&& value);
+  void set_content(const char* value);
+  void set_content(const char* value, size_t size);
+  std::string* mutable_content();
+  std::string* release_content();
+  void set_allocated_content(std::string* content);
+
   // required uint32 id = 1 [default = 0];
   bool has_id() const;
   void clear_id();
@@ -223,25 +236,15 @@ class MsgHeader :
   ::PROTOBUF_NAMESPACE_ID::uint32 id() const;
   void set_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
 
-  // required uint32 len = 2 [default = 0];
-  bool has_len() const;
-  void clear_len();
-  static const int kLenFieldNumber = 2;
-  ::PROTOBUF_NAMESPACE_ID::uint32 len() const;
-  void set_len(::PROTOBUF_NAMESPACE_ID::uint32 value);
-
   // @@protoc_insertion_point(class_scope:MsgHeader)
  private:
   class _Internal;
 
-  // helper for ByteSizeLong()
-  size_t RequiredFieldsByteSizeFallback() const;
-
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr content_;
   ::PROTOBUF_NAMESPACE_ID::uint32 id_;
-  ::PROTOBUF_NAMESPACE_ID::uint32 len_;
   friend struct ::TableStruct_a_2eproto;
 };
 // -------------------------------------------------------------------
@@ -759,38 +762,78 @@ class AddressBook :
 
 // required uint32 id = 1 [default = 0];
 inline bool MsgHeader::has_id() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void MsgHeader::clear_id() {
   id_ = 0u;
-  _has_bits_[0] &= ~0x00000001u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline ::PROTOBUF_NAMESPACE_ID::uint32 MsgHeader::id() const {
   // @@protoc_insertion_point(field_get:MsgHeader.id)
   return id_;
 }
 inline void MsgHeader::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000001u;
+  _has_bits_[0] |= 0x00000002u;
   id_ = value;
   // @@protoc_insertion_point(field_set:MsgHeader.id)
 }
 
-// required uint32 len = 2 [default = 0];
-inline bool MsgHeader::has_len() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+// optional string content = 2;
+inline bool MsgHeader::has_content() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void MsgHeader::clear_len() {
-  len_ = 0u;
-  _has_bits_[0] &= ~0x00000002u;
+inline void MsgHeader::clear_content() {
+  content_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint32 MsgHeader::len() const {
-  // @@protoc_insertion_point(field_get:MsgHeader.len)
-  return len_;
+inline const std::string& MsgHeader::content() const {
+  // @@protoc_insertion_point(field_get:MsgHeader.content)
+  return content_.GetNoArena();
 }
-inline void MsgHeader::set_len(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _has_bits_[0] |= 0x00000002u;
-  len_ = value;
-  // @@protoc_insertion_point(field_set:MsgHeader.len)
+inline void MsgHeader::set_content(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  content_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:MsgHeader.content)
+}
+inline void MsgHeader::set_content(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  content_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:MsgHeader.content)
+}
+inline void MsgHeader::set_content(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  content_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MsgHeader.content)
+}
+inline void MsgHeader::set_content(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  content_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MsgHeader.content)
+}
+inline std::string* MsgHeader::mutable_content() {
+  _has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_mutable:MsgHeader.content)
+  return content_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MsgHeader::release_content() {
+  // @@protoc_insertion_point(field_release:MsgHeader.content)
+  if (!has_content()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return content_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MsgHeader::set_allocated_content(std::string* content) {
+  if (content != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  content_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), content);
+  // @@protoc_insertion_point(field_set_allocated:MsgHeader.content)
 }
 
 // -------------------------------------------------------------------

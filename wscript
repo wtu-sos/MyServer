@@ -38,7 +38,7 @@ def post_build(ctx):
 
 
 includes_dir = ['.', 'libs/', 'libs/include', 'libs/glog/glog/include']
-cxx_build_flags = ['-std=c++14', '-g', '-O0']
+cxx_build_flags = ['-std=c++17', '-g', '-O0']
 
 # 指定静态库以及对应的路径，不然链接时报错
 ld_flags = ['-lpthread', '-lglog', '-L/home/yu/git/MyServer/libs/glog/glog/lib']

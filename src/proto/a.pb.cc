@@ -102,9 +102,9 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_a_2eproto::offsets[] PROTOBUF_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::MsgHeader, id_),
-  PROTOBUF_FIELD_OFFSET(::MsgHeader, len_),
-  0,
+  PROTOBUF_FIELD_OFFSET(::MsgHeader, content_),
   1,
+  0,
   PROTOBUF_FIELD_OFFSET(::Person_PhoneNumber, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Person_PhoneNumber, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -150,14 +150,14 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 };
 
 const char descriptor_table_protodef_a_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\007a.proto\"*\n\tMsgHeader\022\r\n\002id\030\001 \002(\r:\0010\022\016\n"
-  "\003len\030\002 \002(\r:\0010\"\311\001\n\006Person\022\014\n\004name\030\001 \002(\t\022\n"
-  "\n\002id\030\002 \002(\005\022\r\n\005email\030\003 \001(\t\022#\n\006phones\030\004 \003("
-  "\0132\023.Person.PhoneNumber\032D\n\013PhoneNumber\022\016\n"
-  "\006number\030\001 \002(\t\022%\n\004type\030\002 \001(\0162\021.Person.Pho"
-  "neType:\004HOME\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022\010\n"
-  "\004HOME\020\001\022\010\n\004WORK\020\002\"&\n\013AddressBook\022\027\n\006peop"
-  "le\030\001 \003(\0132\007.Person"
+  "\n\007a.proto\"+\n\tMsgHeader\022\r\n\002id\030\001 \002(\r:\0010\022\017\n"
+  "\007content\030\002 \001(\t\"\311\001\n\006Person\022\014\n\004name\030\001 \002(\t\022"
+  "\n\n\002id\030\002 \002(\005\022\r\n\005email\030\003 \001(\t\022#\n\006phones\030\004 \003"
+  "(\0132\023.Person.PhoneNumber\032D\n\013PhoneNumber\022\016"
+  "\n\006number\030\001 \002(\t\022%\n\004type\030\002 \001(\0162\021.Person.Ph"
+  "oneType:\004HOME\"+\n\tPhoneType\022\n\n\006MOBILE\020\000\022\010"
+  "\n\004HOME\020\001\022\010\n\004WORK\020\002\"&\n\013AddressBook\022\027\n\006peo"
+  "ple\030\001 \003(\0132\007.Person"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_a_2eproto_deps[1] = {
 };
@@ -170,7 +170,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_a_2
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_a_2eproto_once;
 static bool descriptor_table_a_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_a_2eproto = {
-  &descriptor_table_a_2eproto_initialized, descriptor_table_protodef_a_2eproto, "a.proto", 297,
+  &descriptor_table_a_2eproto_initialized, descriptor_table_protodef_a_2eproto, "a.proto", 298,
   &descriptor_table_a_2eproto_once, descriptor_table_a_2eproto_sccs, descriptor_table_a_2eproto_deps, 4, 0,
   schemas, file_default_instances, TableStruct_a_2eproto::offsets,
   file_level_metadata_a_2eproto, 4, file_level_enum_descriptors_a_2eproto, file_level_service_descriptors_a_2eproto,
@@ -210,16 +210,16 @@ class MsgHeader::_Internal {
  public:
   using HasBits = decltype(std::declval<MsgHeader>()._has_bits_);
   static void set_has_id(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
-  }
-  static void set_has_len(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
+  }
+  static void set_has_content(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
   }
 };
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int MsgHeader::kIdFieldNumber;
-const int MsgHeader::kLenFieldNumber;
+const int MsgHeader::kContentFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 MsgHeader::MsgHeader()
@@ -232,16 +232,18 @@ MsgHeader::MsgHeader(const MsgHeader& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  ::memcpy(&id_, &from.id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&len_) -
-    reinterpret_cast<char*>(&id_)) + sizeof(len_));
+  content_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from.has_content()) {
+    content_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.content_);
+  }
+  id_ = from.id_;
   // @@protoc_insertion_point(copy_constructor:MsgHeader)
 }
 
 void MsgHeader::SharedCtor() {
-  ::memset(&id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&len_) -
-      reinterpret_cast<char*>(&id_)) + sizeof(len_));
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MsgHeader_a_2eproto.base);
+  content_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  id_ = 0u;
 }
 
 MsgHeader::~MsgHeader() {
@@ -250,6 +252,7 @@ MsgHeader::~MsgHeader() {
 }
 
 void MsgHeader::SharedDtor() {
+  content_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void MsgHeader::SetCachedSize(int size) const {
@@ -268,11 +271,10 @@ void MsgHeader::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    ::memset(&id_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&len_) -
-        reinterpret_cast<char*>(&id_)) + sizeof(len_));
+  if (cached_has_bits & 0x00000001u) {
+    content_.ClearNonDefaultToEmptyNoArena();
   }
+  id_ = 0u;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -294,11 +296,10 @@ const char* MsgHeader::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required uint32 len = 2 [default = 0];
+      // optional string content = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
-          _Internal::set_has_len(&has_bits);
-          len_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8Verify(mutable_content(), ptr, ctx, "MsgHeader.content");
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -346,13 +347,15 @@ bool MsgHeader::MergePartialFromCodedStream(
         break;
       }
 
-      // required uint32 len = 2 [default = 0];
+      // optional string content = 2;
       case 2: {
-        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (16 & 0xFF)) {
-          _Internal::set_has_len(&_has_bits_);
-          DO_((::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadPrimitive<
-                   ::PROTOBUF_NAMESPACE_ID::uint32, ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &len_)));
+        if (static_cast< ::PROTOBUF_NAMESPACE_ID::uint8>(tag) == (18 & 0xFF)) {
+          DO_(::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::ReadString(
+                input, this->mutable_content()));
+          ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->content().data(), static_cast<int>(this->content().length()),
+            ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::PARSE,
+            "MsgHeader.content");
         } else {
           goto handle_unusual;
         }
@@ -388,13 +391,18 @@ void MsgHeader::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required uint32 id = 1 [default = 0];
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
   }
 
-  // required uint32 len = 2 [default = 0];
-  if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32(2, this->len(), output);
+  // optional string content = 2;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->content().data(), static_cast<int>(this->content().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "MsgHeader.content");
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->content(), output);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -412,13 +420,19 @@ void MsgHeader::SerializeWithCachedSizes(
 
   cached_has_bits = _has_bits_[0];
   // required uint32 id = 1 [default = 0];
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000002u) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
   }
 
-  // required uint32 len = 2 [default = 0];
-  if (cached_has_bits & 0x00000002u) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->len(), target);
+  // optional string content = 2;
+  if (cached_has_bits & 0x00000001u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->content().data(), static_cast<int>(this->content().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "MsgHeader.content");
+    target =
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteStringToArray(
+        2, this->content(), target);
   }
 
   if (_internal_metadata_.have_unknown_fields()) {
@@ -429,26 +443,6 @@ void MsgHeader::SerializeWithCachedSizes(
   return target;
 }
 
-size_t MsgHeader::RequiredFieldsByteSizeFallback() const {
-// @@protoc_insertion_point(required_fields_byte_size_fallback_start:MsgHeader)
-  size_t total_size = 0;
-
-  if (has_id()) {
-    // required uint32 id = 1 [default = 0];
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->id());
-  }
-
-  if (has_len()) {
-    // required uint32 len = 2 [default = 0];
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->len());
-  }
-
-  return total_size;
-}
 size_t MsgHeader::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:MsgHeader)
   size_t total_size = 0;
@@ -458,23 +452,23 @@ size_t MsgHeader::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::ComputeUnknownFieldsSize(
         _internal_metadata_.unknown_fields());
   }
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required uint32 id = 1 [default = 0];
+  // required uint32 id = 1 [default = 0];
+  if (has_id()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
         this->id());
-
-    // required uint32 len = 2 [default = 0];
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
-        this->len());
-
-  } else {
-    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
+
+  // optional string content = 2;
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000001u) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->content());
+  }
 
   int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
   SetCachedSize(cached_size);
@@ -506,10 +500,11 @@ void MsgHeader::MergeFrom(const MsgHeader& from) {
   cached_has_bits = from._has_bits_[0];
   if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
-      id_ = from.id_;
+      _has_bits_[0] |= 0x00000001u;
+      content_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.content_);
     }
     if (cached_has_bits & 0x00000002u) {
-      len_ = from.len_;
+      id_ = from.id_;
     }
     _has_bits_[0] |= cached_has_bits;
   }
@@ -530,7 +525,7 @@ void MsgHeader::CopyFrom(const MsgHeader& from) {
 }
 
 bool MsgHeader::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
   return true;
 }
 
@@ -542,8 +537,9 @@ void MsgHeader::InternalSwap(MsgHeader* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
+  content_.Swap(&other->content_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
   swap(id_, other->id_);
-  swap(len_, other->len_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MsgHeader::GetMetadata() const {

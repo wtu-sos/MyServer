@@ -4,7 +4,8 @@ syntax = "proto2";
 
 message MsgHeader {
     required uint32 id = 1 [default = 0];
-    required uint32 len = 2 [default = 0];
+    //required uint32 len = 2 [default = 0];
+    optional string content = 2;
 }
 
 message Person {

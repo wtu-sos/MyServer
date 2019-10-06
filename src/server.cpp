@@ -99,11 +99,13 @@ private:
     std::cout << "do read header" << std::endl;
     auto self(shared_from_this());
     asio::async_read(socket_,
-        asio::buffer(read_msg_.data(), message::header_length),
-        [this, self](std::error_code ec, std::size_t /*length*/)
+        asio::buffer(read_msg_.data(), sizeof(int)),
+        [this, self](std::error_code ec, std::size_t length)
         {
-          std::cout << "do read header call back" << std::endl;
-          if (!ec && read_msg_.decode_header())
+          std::cout << "do read header call back! msg content: " << read_msg_.data() 
+                    << " msg size: " << length 
+                    << " error code: " << ec << std::endl;
+          if (!ec && read_msg_.decode_len())
           {
             do_read_body();
           }
@@ -116,14 +118,14 @@ private:
 
   void do_read_body()
   {
-    std::cout << "do read body" << std::endl;
+    std::cout << "do read body read_msg_.body_length: " << read_msg_.body_length() << std::endl;
     auto self(shared_from_this());
     asio::async_read(socket_,
         asio::buffer(read_msg_.body(), read_msg_.body_length()),
-        [this, self](std::error_code ec, std::size_t /*length*/)
+        [this, self](std::error_code ec, std::size_t length)
         {
-          std::cout << "do read body call back" << std::endl;
-          if (!ec)
+          std::cout << "do read body call back! len: " << length << std::endl;
+          if (!ec && read_msg_.decode_header())
           {
             room_.deliver(read_msg_);
             do_read_header();
@@ -137,14 +139,14 @@ private:
 
   void do_write()
   {
-    std::cout << "do write" << std::endl;
+    LOG(INFO) << "do write" << std::endl;
     auto self(shared_from_this());
     asio::async_write(socket_,
         asio::buffer(write_msgs_.front().data(),
           write_msgs_.front().length()),
         [this, self](std::error_code ec, std::size_t /*length*/)
         {
-          std::cout << "do write call back" << std::endl;
+          LOG(INFO) << "do write call back" << std::endl;
           if (!ec)
           {
             write_msgs_.pop_front();
@@ -184,7 +186,7 @@ private:
     acceptor_.async_accept(
         [this](std::error_code ec, tcp::socket socket)
         {
-          std::cout << "do accept call back" << std::endl;
+          LOG(INFO) << "do accept call back" << std::endl;
           if (!ec)
           {
             std::make_shared<chat_session>(std::move(socket), room_)->start();
@@ -206,7 +208,7 @@ int main(int argc, char* argv[])
   google::InitGoogleLogging("MyServer");
   google::SetLogDestination(google::GLOG_INFO, "./log/info/");
 
-  LOG(INFO) << "pb message header :" << sizeof(MsgHeader ) << "\n byte size: " << MsgHeader().ByteSizeLong() << std::endl;
+  //LOG(INFO) << "pb message header :" << sizeof(MsgHeader) << "\n byte size: " << MsgHeader().ByteSizeLong() << std::endl;
   try
   {
     if (argc < 2)
@@ -230,6 +232,8 @@ int main(int argc, char* argv[])
   {
     std::cerr << "Exception: " << e.what() << "\n";
   }
+
+   google::ShutdownGoogleLogging();
 
   return 0;
 }
