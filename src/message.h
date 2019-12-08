@@ -1,128 +1,84 @@
-//
-// chat_message.hpp
-// ~~~~~~~~~~~~~~~~
-//
-// Copyright (c) 2003-2019 Christopher M. Kohlhoff (chris at kohlhoff dot com)
-//
-// Distributed under the Boost Software License, Version 1.0. (See accompanying
-// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-//
-
 #ifndef CHAT_MESSAGE_HPP
 #define CHAT_MESSAGE_HPP
+
+#include <arpa/inet.h>
 
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <iostream>
 #include <string>
 
-#include <arpa/inet.h>
-#include <iostream>
-
 #include "asio.hpp"
+#include "glog/logging.h"
 
-#include "proto/a.pb.h"
+struct MsgHeader {
+  unsigned int uiType;
+  unsigned int uiMsgLen;
+};
 
-class message
-{
-public:
-  enum { header_length = 4 };
+class message {
+ public:
+  enum { header_length = 8 };
   enum { max_body_length = 2048 };
 
-  message() { 
+  message() {
+    mHeader.uiType = 0;
+    mHeader.uiMsgLen = 0;
   }
 
-  const char* data() const
-  {
-    return data_;
+  void set_message(std::string content) {
+    if (content.size() > max_body_length) {
+      LOG(ERROR) << "message length is too large: " << content.size();
+    }
+    LOG(INFO) << "message content " << content;
+    mHeader.uiType = 1;
+    mHeader.uiMsgLen = content.size();
+    encode_header();
+    std::memcpy(data_ + header_length, content.c_str(), content.size());
   }
 
-  char* data()
-  {
-    return data_;
+  std::string get_message() const {
+    std::string m(body(), body_length());
+    return std::move(m);
   }
 
-  std::size_t length() const
-  {
-    return header_len + sizeof(int);
-  }
+  const char* data() const { return data_; }
 
-  const char* body() const
-  {
-    return data_ + sizeof(int);
-  }
+  char* data() { return data_; }
 
-  char* body()
-  {
-    return data_ + sizeof(int);
-  }
+  std::size_t length() const { return mHeader.uiMsgLen + header_length; }
 
-  const unsigned int id() const
-  {
-    return mHeader.id();
-  }
+  const char* body() const { return data_ + header_length; }
 
-  void set_id(unsigned int id) 
-  {
-    return mHeader.set_id(id);
-  }
+  char* body() { return data_ + header_length; }
 
-  std::size_t body_length() const
-  {
-    return header_len;
-  }
+  std::size_t body_length() const { return mHeader.uiMsgLen; }
 
-  void body_length(std::size_t new_length)
-  {
-    header_len = new_length;
-    if (header_len > max_body_length)
-      header_len = max_body_length;
-  }
-
-  void set_payload(std::string payload) {
-    mHeader.set_content(payload);
-  }
-  bool decode_len() {
+  bool decode_header() {
     char len[5] = "";
-    std::strncat(len, data_, sizeof(int));
-    std::cout << "header len: " << *((int*)data_) << std::endl;
-    header_len = *((int*)data_);
+    std::memcpy(len, data_, sizeof(unsigned int));
+    mHeader.uiType = *((int*)len);
+    LOG(INFO) << "message type: " << mHeader.uiType;
+
+    std::memset(len, 0, 5);
+
+    std::memcpy(len, data_ + sizeof(unsigned int), sizeof(unsigned int));
+    mHeader.uiMsgLen = *((int*)len);
+    LOG(INFO) << "message length: " << mHeader.uiMsgLen;
+
     return true;
   }
 
-  bool decode_header()
-  {
-    bool result = mHeader.ParseFromArray(data_ + sizeof(int), header_len);
-
-    std::cout << " header id: " << mHeader.id() 
-              << " content: " << mHeader.content() << std::endl;
-
-    return result;
+  void encode_header() {
+    std::memset(data_, 0, max_body_length + header_length);
+    std::memcpy(data_, &mHeader.uiType, sizeof(int));
+    std::memcpy(data_ + sizeof(int), &mHeader.uiMsgLen, sizeof(int));
   }
 
-  void encode_header()
-  {
-    std::string data;
-    std::cout << " header id: " << mHeader.id() 
-              << " content len: " << header_len
-              << " content: " << mHeader.content() << std::endl;
-    mHeader.SerializeToString(&data);
-    std::cout << "data size: " << data.size() << " data content: " << data << std::endl;
-    //data_ += m_payload;
-    header_len = data.size();
-    std::memset(data_, 0, 2048);
-    std::memcpy(data_, &header_len, sizeof(int));
-    std::memcpy(data_ + sizeof(int), data.c_str(), data.size());
-    //std::strcpy(data_ + sizeof(int), data.c_str());
-    //std::strncat(data_ + data.size(), m_payload.data(), m_payload.size());
-    //printf("data content: %s \n", data_);
-  }
-
-private:
-  char data_[2048];
-  asio::mutable_buffer raw_data;
-  int header_len;
+ private:
+  char data_[max_body_length + header_length];
   MsgHeader mHeader;
 };
 
-#endif // CHAT_MESSAGE_HPP
+#endif  // CHAT_MESSAGE_HPP
